@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "stevenswarppads:block/warp_pad_core"
+  }
+}

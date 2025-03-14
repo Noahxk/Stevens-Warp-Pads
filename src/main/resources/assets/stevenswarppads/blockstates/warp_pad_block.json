@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "stevenswarppads:block/warp_pad_block"
+    }
+  }
+}
