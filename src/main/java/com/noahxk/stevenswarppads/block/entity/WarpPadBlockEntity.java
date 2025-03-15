@@ -1,6 +1,8 @@
 package com.noahxk.stevenswarppads.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -11,6 +13,26 @@ public class WarpPadBlockEntity extends BlockEntity {
 
     private boolean hasParent;
     private int parentX, parentY, parentZ;
+
+    @Override
+    public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+
+        tag.putBoolean("hasParent", this.hasParent);
+        tag.putInt("parentX", this.parentX);
+        tag.putInt("parentY", this.parentY);
+        tag.putInt("parentZ", this.parentZ);
+    }
+
+    @Override
+    public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+
+        this.hasParent = tag.getBoolean("hasParent");
+        this.parentX = tag.getInt("parentX");
+        this.parentY = tag.getInt("parentY");
+        this.parentZ = tag.getInt("parentZ");
+    }
 
     public boolean hasParent() {
         return this.hasParent;
@@ -36,5 +58,10 @@ public class WarpPadBlockEntity extends BlockEntity {
         this.parentX = x;
         this.parentY = y;
         this.parentZ = z;
+    }
+
+    public void reset() {
+        this.setHasParent(false);
+        this.setParentPos(0,0,0);
     }
 }
