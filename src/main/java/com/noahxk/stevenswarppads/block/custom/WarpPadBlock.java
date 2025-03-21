@@ -44,7 +44,7 @@ public class WarpPadBlock extends BaseEntityBlock {
         for(int x = xCoord - 2; x < xCoord + 3; x++)
             for(int z = zCoord - 2; z < zCoord + 3; z++) {
                 BlockEntity block = level.getBlockEntity(new BlockPos(x, yCoord, z));
-                if(block instanceof WarpPadCoreBlockEntity) {
+                if(block != null && block instanceof WarpPadCoreBlockEntity) {
                     ((WarpPadCoreBlockEntity) block).formationCheck();
                 }
             }
@@ -55,9 +55,9 @@ public class WarpPadBlock extends BaseEntityBlock {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         WarpPadBlockEntity block = (WarpPadBlockEntity) level.getBlockEntity(pos);
-        if(block.hasParent()) {
+        if(block != null && block.hasParent()) {
             WarpPadCoreBlockEntity core = (WarpPadCoreBlockEntity) level.getBlockEntity(new BlockPos(block.getParentX(), block.getParentY(), block.getParentZ()));
-            core.resetWarpPad();
+            if(core != null) core.resetWarpPad();
         }
 
         super.onRemove(state, level, pos, newState, movedByPiston);

@@ -1,10 +1,12 @@
 package com.noahxk.stevenswarppads.block.entity;
 
+import com.noahxk.stevenswarppads.network.WarpStream;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.network.registration.NetworkChannel;
 
 public class WarpPadCoreBlockEntity extends BlockEntity {
     public WarpPadCoreBlockEntity(BlockPos pos, BlockState blockState) {
@@ -12,12 +14,18 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
     }
 
     private boolean isParent;
+    private String warpPadID = "";
+    private boolean isWarping;
+    private boolean isFormed;
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
 
         tag.putBoolean("isParent", this.isParent);
+        tag.putString("warpPadID", this.warpPadID);
+        tag.putBoolean("isWarping", this.isWarping);
+        tag.putBoolean("isFormed", this.isFormed);
     }
 
     @Override
@@ -25,6 +33,25 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
 
         this.isParent = tag.getBoolean("isParent");
+        this.warpPadID = tag.getString("warpPadID");
+        this.isWarping = tag.getBoolean("isWarping");
+        this.isFormed = tag.getBoolean("isFormed");
+    }
+
+    public boolean isFormed() {
+        return this.isFormed;
+    }
+
+    public void setIsFormed(boolean value) {
+        this.isFormed = value;
+    }
+
+    public String getWarpPadID() {
+        return this.warpPadID;
+    }
+
+    public void setWarpPadID(String warpPadID) {
+        this.warpPadID = warpPadID;
     }
 
     public boolean isParent() {
@@ -77,6 +104,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
             }
 
         System.out.println("Warp Pad Formed at " + this.getBlockPos().toShortString());
+        this.setIsFormed(true);
     }
 
     public void resetWarpPad() {
@@ -97,6 +125,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
             }
 
         System.out.println("Warp Pad Reset at " + this.getBlockPos().toShortString());
+        this.setIsFormed(false);
     }
 
     public void formationCheck() {
@@ -106,6 +135,16 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
             } else {
                 this.resetWarpPad();
             }
+        }
+    }
+
+    public void recieveWarpStream(WarpStream warpStream) {
+        if(warpStream.getTargetWarpPadID() == this.warpPadID) {
+            // Logic for incoming warp stream
+
+        } else {
+            // Logic for outgoing warp stream
+
         }
     }
 }
