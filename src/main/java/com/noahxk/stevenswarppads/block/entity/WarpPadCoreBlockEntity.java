@@ -1,14 +1,22 @@
 package com.noahxk.stevenswarppads.block.entity;
 
 import com.noahxk.stevenswarppads.network.WarpStream;
+import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreMenu;
+import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.network.registration.NetworkChannel;
+import org.jetbrains.annotations.Nullable;
 
-public class WarpPadCoreBlockEntity extends BlockEntity {
+public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider {
     public WarpPadCoreBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.WARP_PAD_CORE_BLOCK_ENTITY.get(), pos, blockState);
     }
@@ -138,13 +146,13 @@ public class WarpPadCoreBlockEntity extends BlockEntity {
         }
     }
 
-    public void recieveWarpStream(WarpStream warpStream) {
-        if(warpStream.getTargetWarpPadID() == this.warpPadID) {
-            // Logic for incoming warp stream
+    @Override
+    public Component getDisplayName() {
+        return Component.literal(this.getWarpPadID());
+    }
 
-        } else {
-            // Logic for outgoing warp stream
-
-        }
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+        return new WarpPadCoreMenu(i, inventory, this);
     }
 }

@@ -3,6 +3,10 @@ package com.noahxk.stevenswarppads;
 import com.noahxk.stevenswarppads.block.ModBlocks;
 import com.noahxk.stevenswarppads.block.entity.ModBlockEntities;
 import com.noahxk.stevenswarppads.item.ModItems;
+import com.noahxk.stevenswarppads.screen.ModMenuTypes;
+import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreMenu;
+import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreScreen;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -38,6 +42,7 @@ public class StevensWarpPads {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -63,6 +68,11 @@ public class StevensWarpPads {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 
+        }
+
+        @SubscribeEvent
+        public static void registerScreens(RegisterMenuScreensEvent event) {
+            event.register(ModMenuTypes.WARP_PAD_CORE_MENU.get(), WarpPadCoreScreen::new);
         }
     }
 }
