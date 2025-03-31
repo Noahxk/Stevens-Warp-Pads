@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import java.util.List;
+
 public class WarpPadCoreMenu extends AbstractContainerMenu {
     public final WarpPadCoreBlockEntity blockEntity;
     private final Level level;

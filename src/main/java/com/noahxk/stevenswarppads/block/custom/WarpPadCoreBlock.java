@@ -67,8 +67,9 @@ public class WarpPadCoreBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         WarpPadCoreBlockEntity blockEntity = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
 
-        if(blockEntity.isFormed()) player.openMenu(new SimpleMenuProvider(blockEntity, Component.translatable("menu.title.stevenswarppads.warp_pad_core")), pos);
-
-        return InteractionResult.SUCCESS;
+        if(blockEntity.isFormed()) {
+            player.openMenu(new SimpleMenuProvider(blockEntity, Component.translatable("menu.title.stevenswarppads.warp_pad_core")), pos);
+            return InteractionResult.SUCCESS_NO_ITEM_USED;
+        } else return InteractionResult.FAIL;
     }
 }
