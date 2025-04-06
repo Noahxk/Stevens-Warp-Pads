@@ -21,10 +21,8 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         super(ModBlockEntities.WARP_PAD_CORE_BLOCK_ENTITY.get(), pos, blockState);
     }
 
-    private boolean isParent;
-    private String warpPadID = "";
-    private boolean isWarping;
-    private boolean isFormed;
+    private boolean isParent, isWarping, isFormed;
+    private String warpPadID = "Unnamed Warp Pad";
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

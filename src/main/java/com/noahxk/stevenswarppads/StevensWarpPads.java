@@ -4,12 +4,8 @@ import com.noahxk.stevenswarppads.block.ModBlocks;
 import com.noahxk.stevenswarppads.block.entity.ModBlockEntities;
 import com.noahxk.stevenswarppads.item.ModItems;
 import com.noahxk.stevenswarppads.screen.ModMenuTypes;
-import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreMenu;
 import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreScreen;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
@@ -29,7 +25,6 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 @Mod(StevensWarpPads.MODID)
 public class StevensWarpPads {
     public static final String MODID = "stevenswarppads";
-    private static final Logger LOGGER = LogUtils.getLogger();
 
     public StevensWarpPads(IEventBus modEventBus, ModContainer modContainer){
 

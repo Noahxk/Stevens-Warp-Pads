@@ -4,12 +4,21 @@ import com.mojang.serialization.MapCodec;
 import com.noahxk.stevenswarppads.block.entity.WarpPadBlockEntity;
 import com.noahxk.stevenswarppads.block.entity.WarpPadCoreBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class WarpPadBlock extends BaseEntityBlock {
@@ -61,5 +70,19 @@ public class WarpPadBlock extends BaseEntityBlock {
         }
 
         super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if(player.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) return InteractionResult.FAIL;
+        WarpPadBlockEntity blockEntity = (WarpPadBlockEntity) level.getBlockEntity(pos);
+
+        if(blockEntity.hasParent()) {
+            BlockPos parentBlockEntityPos = new BlockPos(blockEntity.getParentX(), blockEntity.getParentY(), blockEntity.getParentZ());
+            WarpPadCoreBlockEntity parentBlockEntity = (WarpPadCoreBlockEntity) level.getBlockEntity(parentBlockEntityPos);
+
+            player.openMenu(new SimpleMenuProvider(parentBlockEntity, Component.translatable("menu.title.stevenswarppads.warp_pad_core")), parentBlockEntityPos);
+            return InteractionResult.SUCCESS_NO_ITEM_USED;
+        } else return InteractionResult.FAIL;
     }
 }
