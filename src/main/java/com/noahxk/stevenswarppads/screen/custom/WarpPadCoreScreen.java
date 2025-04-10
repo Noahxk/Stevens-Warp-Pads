@@ -11,19 +11,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 
 public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> {
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(StevensWarpPads.MODID, "textures/gui/warppadcore/warp_pad_core_menu.png");
     private WarpPadCoreBlockEntity blockEntity;
+    private Player player;
 
     public WarpPadCoreScreen(WarpPadCoreMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
         this.blockEntity = menu.blockEntity;
+        this.player = playerInventory.player;
     }
 
     @Override
     protected void init() {
-        addRenderableWidget(new WarpOptionButton(this.width / 2 - 50, this.height / 2 - 50, 50, 20, Component.literal(blockEntity.getWarpPadID()), new BlockPos(0,0,0), blockEntity));
+        addRenderableWidget(new WarpOptionButton(this.width / 2 - 50, this.height / 2 - 50, 50, 20, Component.literal(blockEntity.getWarpPadName()), new BlockPos(0,0,0), blockEntity));
     }
 
     @Override

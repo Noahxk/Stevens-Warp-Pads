@@ -8,13 +8,11 @@ public class WarpStream {
     private BlockPos targetPos;
     private Level targetDim;
     private ServerPlayer requestingPlayer;
-    private String targetWarpPadID;
 
-    public WarpStream(BlockPos targetPos, Level targetDim, ServerPlayer requestingPlayer, String targetWarpPadID) {
+    public WarpStream(BlockPos targetPos, Level targetDim, ServerPlayer requestingPlayer) {
         this.targetPos = targetPos;
         this.targetDim = targetDim;
         this.requestingPlayer = requestingPlayer;
-        this.targetWarpPadID = targetWarpPadID;
     }
 
     public BlockPos getTargetPos() {
@@ -27,9 +25,5 @@ public class WarpStream {
 
     public ServerPlayer getRequestingPlayer() {
         return this.requestingPlayer;
-    }
-
-    public String getTargetWarpPadID() {
-        return this.targetWarpPadID;
     }
 }

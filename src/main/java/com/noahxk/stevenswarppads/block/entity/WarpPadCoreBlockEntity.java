@@ -1,20 +1,22 @@
 package com.noahxk.stevenswarppads.block.entity;
 
-import com.noahxk.stevenswarppads.network.WarpStream;
+import com.noahxk.stevenswarppads.data.WarpPadListSavedData;
 import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreMenu;
-import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.network.registration.NetworkChannel;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider {
     public WarpPadCoreBlockEntity(BlockPos pos, BlockState blockState) {
@@ -22,14 +24,14 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
     }
 
     private boolean isParent, isWarping, isFormed;
-    private String warpPadID = "Unnamed Warp Pad";
+    private String warpPadName = "Unnamed Warp Pad";
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
 
         tag.putBoolean("isParent", this.isParent);
-        tag.putString("warpPadID", this.warpPadID);
+        tag.putString("warpPadName", this.warpPadName);
         tag.putBoolean("isWarping", this.isWarping);
         tag.putBoolean("isFormed", this.isFormed);
     }
@@ -39,7 +41,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         super.loadAdditional(tag, registries);
 
         this.isParent = tag.getBoolean("isParent");
-        this.warpPadID = tag.getString("warpPadID");
+        this.warpPadName = tag.getString("warpPadName");
         this.isWarping = tag.getBoolean("isWarping");
         this.isFormed = tag.getBoolean("isFormed");
     }
@@ -52,12 +54,12 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         this.isFormed = value;
     }
 
-    public String getWarpPadID() {
-        return this.warpPadID;
+    public String getWarpPadName() {
+        return this.warpPadName;
     }
 
-    public void setWarpPadID(String warpPadID) {
-        this.warpPadID = warpPadID;
+    public void setWarpPadName(String warpPadName) {
+        this.warpPadName = warpPadName;
     }
 
     public boolean isParent() {
@@ -111,6 +113,8 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
 
         System.out.println("Warp Pad Formed at " + this.getBlockPos().toShortString());
         this.setIsFormed(true);
+
+        WarpPadListSavedData.addWarpPad(this.getBlockPos(), this.getWarpPadName(), this.getLevel().getServer().overworld());
     }
 
     public void resetWarpPad() {
@@ -132,6 +136,8 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
 
         System.out.println("Warp Pad Reset at " + this.getBlockPos().toShortString());
         this.setIsFormed(false);
+
+        WarpPadListSavedData.removeWarpPad(this.getBlockPos(), this.getWarpPadName(), this.getLevel().getServer().overworld());
     }
 
     public void formationCheck() {
@@ -146,7 +152,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
 
     @Override
     public Component getDisplayName() {
-        return Component.literal(this.getWarpPadID());
+        return Component.literal(this.getWarpPadName());
     }
 
     @Override
