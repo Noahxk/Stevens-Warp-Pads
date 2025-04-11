@@ -3,20 +3,24 @@ package com.noahxk.stevenswarppads.screen.custom;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.noahxk.stevenswarppads.StevensWarpPads;
 import com.noahxk.stevenswarppads.block.entity.WarpPadCoreBlockEntity;
-import com.noahxk.stevenswarppads.screen.button.WarpOptionButton;
+import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpPadNameChangePacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
 
 public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> {
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(StevensWarpPads.MODID, "textures/gui/warppadcore/warp_pad_core_menu.png");
     private WarpPadCoreBlockEntity blockEntity;
     private Player player;
+    private EditBox textField;
 
     public WarpPadCoreScreen(WarpPadCoreMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -26,7 +30,13 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> 
 
     @Override
     protected void init() {
-        addRenderableWidget(new WarpOptionButton(this.width / 2 - 50, this.height / 2 - 50, 50, 20, Component.literal(blockEntity.getWarpPadName()), new BlockPos(0,0,0), blockEntity));
+        textField = new EditBox(Minecraft.getInstance().font, this.width / 2 - 85, this.height / 2 - 80, 165, 13, textField, Component.literal("Warp Pad Name"));
+        textField.setMaxLength(100);
+        textField.setValue(this.blockEntity.getWarpPadName());
+        textField.setEditable(true);
+        addRenderableWidget(textField);
+
+        //addRenderableWidget(new WarpOptionButton(this.width / 2 - 50, this.height / 2 - 50, 50, 20, Component.literal(blockEntity.getWarpPadName()), new BlockPos(0,0,0), blockEntity));
     }
 
     @Override
@@ -43,4 +53,18 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> 
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if(textField.keyPressed(keyCode, scanCode, modifiers) || textField.isFocused()) {
+            if(keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                textField.setFocused(false);
+                PacketDistributor.sendToServer(new ServerboundWarpPadNameChangePacket(textField.getValue(), blockEntity.getBlockPos().asLong()));
+            }
+
+            return true;
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
 }

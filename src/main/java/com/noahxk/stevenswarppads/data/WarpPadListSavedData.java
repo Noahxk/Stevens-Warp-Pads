@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class WarpPadListSavedData extends SavedData {
 
-    private final List<WarpPadData> DATA = new ArrayList<>();
+    public final List<WarpPadData> DATA = new ArrayList<>();
 
     public static WarpPadListSavedData create() {
         return new WarpPadListSavedData();

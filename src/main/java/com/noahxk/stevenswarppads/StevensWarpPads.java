@@ -3,6 +3,7 @@ package com.noahxk.stevenswarppads;
 import com.noahxk.stevenswarppads.block.ModBlocks;
 import com.noahxk.stevenswarppads.block.entity.ModBlockEntities;
 import com.noahxk.stevenswarppads.item.ModItems;
+import com.noahxk.stevenswarppads.network.ModNetworking;
 import com.noahxk.stevenswarppads.screen.ModMenuTypes;
 import com.noahxk.stevenswarppads.screen.custom.WarpPadCoreScreen;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -38,6 +39,7 @@ public class StevensWarpPads {
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        modEventBus.register(new ModNetworking());
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
