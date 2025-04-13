@@ -40,6 +40,7 @@ public class WarpPadBlockEntity extends BlockEntity {
 
     public void setHasParent(boolean hasParent) {
         this.hasParent = hasParent;
+        this.setChanged();
     }
 
     public int getParentX() {
@@ -58,6 +59,7 @@ public class WarpPadBlockEntity extends BlockEntity {
         this.parentX = x;
         this.parentY = y;
         this.parentZ = z;
+        this.setChanged();
     }
 
     public void reset() {
