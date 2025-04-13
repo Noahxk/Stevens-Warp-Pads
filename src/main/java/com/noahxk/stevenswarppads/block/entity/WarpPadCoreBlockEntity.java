@@ -33,7 +33,12 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         tag.putBoolean("isParent", this.isParent);
         tag.putBoolean("isWarping", this.isWarping);
         tag.putBoolean("isFormed", this.isFormed);
-        tag.putString("warpPadName", this.warpPadName);
+
+        if(warpPadName == null) {
+            tag.putString("warpPadName", "Unnamed Warp Pad");
+        } else {
+            tag.putString("warpPadName", this.warpPadName);
+        }
     }
 
     @Override
@@ -49,7 +54,12 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
     @Override
     public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        tag.putString("warpPadName", this.warpPadName);
+
+        if(warpPadName == null) {
+            tag.putString("warpPadName", "Unnamed Warp Pad");
+        } else {
+            tag.putString("warpPadName", this.warpPadName);
+        }
 
         return tag;
     }
@@ -76,6 +86,9 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         this.warpPadName = newName;
         this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
         this.setChanged();
+
+        WarpPadListSavedData.removeWarpPad(this.getBlockPos(), "", this.getLevel().getServer().overworld());
+        WarpPadListSavedData.addWarpPad(this.getBlockPos(), this.getWarpPadName(), this.getLevel().getServer().overworld());
     }
 
     public boolean isParent() {
@@ -131,8 +144,6 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         System.out.println("Warp Pad Formed at " + this.getBlockPos().toShortString());
         this.setIsFormed(true);
         this.setWarpPadName("Unnamed Warp Pad");
-
-        WarpPadListSavedData.addWarpPad(this.getBlockPos(), this.getWarpPadName(), this.getLevel().getServer().overworld());
     }
 
     public void resetWarpPad() {
