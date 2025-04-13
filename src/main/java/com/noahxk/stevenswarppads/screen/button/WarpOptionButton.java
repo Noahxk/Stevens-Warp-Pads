@@ -1,10 +1,12 @@
 package com.noahxk.stevenswarppads.screen.button;
 
 import com.noahxk.stevenswarppads.block.entity.WarpPadCoreBlockEntity;
+import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpLocationSelectedPacket;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class WarpOptionButton extends AbstractButton {
     private BlockPos targetPos;
@@ -20,7 +22,7 @@ public class WarpOptionButton extends AbstractButton {
 
     @Override
     public void onPress() {
-        System.out.println("Target Pad ID: " + this.message.getString() + ", Target Pad Pos: " + this.targetPos.toShortString());
+        PacketDistributor.sendToServer(new ServerboundWarpLocationSelectedPacket(blockEntity.getBlockPos().asLong(), targetPos.asLong()));
     }
 
     @Override
