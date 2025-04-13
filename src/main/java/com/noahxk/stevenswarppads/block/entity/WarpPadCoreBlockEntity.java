@@ -9,18 +9,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.network.protocol.game.ServerboundBlockEntityTagQueryPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.core.jmx.Server;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider {
     public WarpPadCoreBlockEntity(BlockPos pos, BlockState blockState) {
@@ -37,12 +33,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         tag.putBoolean("isParent", this.isParent);
         tag.putBoolean("isWarping", this.isWarping);
         tag.putBoolean("isFormed", this.isFormed);
-
-        if(this.warpPadName == null) {
-            tag.putString("warpPadName", "Unnamed Warp Pad");
-        } else {
-            tag.putString("warpPadName", this.warpPadName);
-        }
+        tag.putString("warpPadName", this.warpPadName);
     }
 
     @Override
@@ -56,13 +47,9 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        if(this.warpPadName == null) {
-            tag.putString("warpPadName", "Unnamed Warp Pad");
-        } else {
-            tag.putString("warpPadName", this.warpPadName);
-        }
+        tag.putString("warpPadName", this.warpPadName);
 
         return tag;
     }
@@ -78,15 +65,17 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
 
     public void setIsFormed(boolean value) {
         this.isFormed = value;
+        this.setChanged();
     }
 
     public String getWarpPadName() {
         return this.warpPadName;
     }
 
-    public void setWarpPadName(String warpPadName) {
-        this.warpPadName = warpPadName;
+    public void setWarpPadName(String newName) {
+        this.warpPadName = newName;
         this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+        this.setChanged();
     }
 
     public boolean isParent() {
@@ -95,6 +84,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
 
     public void setIsParent(boolean isParent) {
         this.isParent = isParent;
+        this.setChanged();
     }
 
     public boolean isWarpPadShapeCorrect() {
@@ -118,7 +108,7 @@ public class WarpPadCoreBlockEntity extends BlockEntity implements MenuProvider 
         if (level.getBlockEntity(new BlockPos(xCoord + 2, yCoord, zCoord - 2)) instanceof WarpPadBlockEntity) return false;
         if (level.getBlockEntity(new BlockPos(xCoord - 2, yCoord, zCoord + 2)) instanceof WarpPadBlockEntity) return false;
 
-        return (i == 20) ? true : false;
+        return i == 20 ? true : false;
     }
 
     public void formWarpPad() {

@@ -8,6 +8,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 public class ServerPayloadHandler {
     public static void handleDataOnMain(final ServerboundWarpPadNameChangePacket data, final IPayloadContext context) {
         WarpPadCoreBlockEntity blockEntity = (WarpPadCoreBlockEntity) context.player().level().getBlockEntity(BlockPos.of(data.pos()));
-        blockEntity.setWarpPadName(data.newName());
+        if(blockEntity != null) blockEntity.setWarpPadName(data.newName());
     }
 }

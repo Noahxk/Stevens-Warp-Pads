@@ -30,7 +30,7 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> 
 
     @Override
     protected void init() {
-        textField = new EditBox(Minecraft.getInstance().font, this.width / 2 - 85, this.height / 2 - 80, 165, 13, textField, Component.literal("Warp Pad Name"));
+        textField = new EditBox(Minecraft.getInstance().font, this.width / 2 - 85, this.height / 2 - 80, 169, 13, textField, Component.literal("Warp Pad Name"));
         textField.setMaxLength(100);
         textField.setValue(this.blockEntity.getWarpPadName());
         textField.setEditable(true);
@@ -59,6 +59,7 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu> 
         if(textField.keyPressed(keyCode, scanCode, modifiers) || textField.isFocused()) {
             if(keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_ESCAPE) {
                 textField.setFocused(false);
+                System.out.println("Text field value: " + textField.getValue());
                 PacketDistributor.sendToServer(new ServerboundWarpPadNameChangePacket(textField.getValue(), blockEntity.getBlockPos().asLong()));
             }
 
