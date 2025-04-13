@@ -1,5 +1,6 @@
 package com.noahxk.stevenswarppads.network;
 
+import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpLocationSelectedPacket;
 import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpPadNameChangePacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -13,6 +14,11 @@ public class ModNetworking {
         registrar.playToServer(
                 ServerboundWarpPadNameChangePacket.TYPE,
                 ServerboundWarpPadNameChangePacket.STREAM_CODEC,
+                ServerPayloadHandler::handleDataOnMain
+        );
+        registrar.playToServer(
+                ServerboundWarpLocationSelectedPacket.TYPE,
+                ServerboundWarpLocationSelectedPacket.STREAM_CODEC,
                 ServerPayloadHandler::handleDataOnMain
         );
     }
