@@ -7,6 +7,7 @@ import com.noahxk.stevenswarppads.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -18,10 +19,10 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(StevensWarpPads.MODID);
 
     public static final DeferredBlock<Block> WARP_PAD_CORE = registerBlock("warp_pad_core",
-            () -> new WarpPadCoreBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new WarpPadCoreBlock(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.GLASS)));
 
     public static final DeferredBlock<Block> WARP_PAD_BLOCK = registerBlock("warp_pad_block",
-            () -> new WarpPadBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            () -> new WarpPadBlock(BlockBehaviour.Properties.of().noOcclusion().sound(SoundType.GLASS)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
