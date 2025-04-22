@@ -3,9 +3,9 @@ package com.noahxk.stevenswarppads.data;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import java.util.UUID;
 public class WarpPadListSavedData extends SavedData {
 
     public final List<WarpPadData> DATA = new ArrayList<>();
+    private static final ServerLevel overworld = ServerLifecycleHooks.getCurrentServer().overworld();
 
     public static WarpPadListSavedData create() {
         return new WarpPadListSavedData();
@@ -42,30 +43,29 @@ public class WarpPadListSavedData extends SavedData {
         return compoundTag;
     }
 
-    public static void addWarpPad(WarpPadData object, ServerLevel level) {
-        WarpPadListSavedData data = level.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
+    public static void addWarpPad(WarpPadData object) {
+        WarpPadListSavedData data = overworld.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
         data.DATA.add(object);
         data.setDirty();
         System.out.println(data.DATA);
     }
 
-    public static void addWarpPad(BlockPos pos, String name, ServerLevel level) {
-        WarpPadListSavedData.addWarpPad(new WarpPadData(pos, name), level);
+    public static void addWarpPad(BlockPos pos, String name, ServerLevel level, UUID id) {
+        WarpPadListSavedData.addWarpPad(new WarpPadData(pos, name, level, id));
     }
 
-    public static void removeWarpPad(WarpPadData object, ServerLevel level) {
-        WarpPadListSavedData data = level.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
-
+    public static void removeWarpPad(WarpPadData object) {
+        WarpPadListSavedData data = overworld.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
         data.DATA.remove(object);
         data.setDirty();
         System.out.println(data.DATA);
     }
 
-    public static void removeWarpPad(BlockPos pos, String name, ServerLevel level) {
-        WarpPadListSavedData.removeWarpPad(new WarpPadData(pos, name), level);
+    public static void removeWarpPad(UUID id) {
+        WarpPadListSavedData.removeWarpPad(new WarpPadData(new BlockPos(0,0,0), "", overworld, id));
     }
 
-    public static WarpPadListSavedData getData(ServerLevel level) {
-        return level.getDataStorage().get(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
+    public static WarpPadListSavedData getData() {
+        return overworld.getDataStorage().get(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
     }
 }
