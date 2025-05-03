@@ -49,24 +49,35 @@ public class WarpPadCoreBlock extends BaseEntityBlock {
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-
-        WarpPadCoreBlockEntity block = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
-        if(block != null) block.formationCheck();
+        if(!level.isClientSide()) {
+            WarpPadCoreBlockEntity block = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
+            block.randomiseWarpPadId();
+            if (block != null) block.formationCheck();
+        }
 
         super.onPlace(state, level, pos, oldState, movedByPiston);
     }
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-
-        WarpPadCoreBlockEntity block = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
-        if(block != null) block.resetWarpPad();
+        if(!level.isClientSide()) {
+            WarpPadCoreBlockEntity block = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
+            if (block != null) block.resetWarpPad();
+        }
 
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if(player.isCrouching() && player.getItemInHand(InteractionHand.MAIN_HAND) == ItemStack.EMPTY) {
+            WarpPadCoreBlockEntity be = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
+            System.out.println(be.getWarpPadId());
+            System.out.println(be.getWarpPadName());
+            System.out.println(be.isFormed());
+            return InteractionResult.SUCCESS_NO_ITEM_USED;
+        }
+
         if(player.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) return InteractionResult.FAIL;
         WarpPadCoreBlockEntity blockEntity = (WarpPadCoreBlockEntity) level.getBlockEntity(pos);
 
