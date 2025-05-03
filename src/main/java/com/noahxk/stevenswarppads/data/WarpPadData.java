@@ -28,7 +28,7 @@ public class WarpPadData {
         tag.putLong("pos", pos.asLong());
         tag.putString("name", name);
         tag.putString("dimension", dimension.dimension().location().toString());
-        tag.putUUID("id", id);
+        tag.putUUID("warpPadId", id);
 
         return tag;
     }
@@ -36,7 +36,7 @@ public class WarpPadData {
     public static WarpPadData deserialize(CompoundTag tag) {
         ResourceKey<Level> dimensionResourceKey = ResourceKey.create(ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath("minecraft", "dimension")), ResourceLocation.parse(tag.getString("dimension")));
 
-        return new WarpPadData(BlockPos.of(tag.getLong("pos")), tag.getString("name"), ServerLifecycleHooks.getCurrentServer().getLevel(dimensionResourceKey), tag.getUUID("id"));
+        return new WarpPadData(BlockPos.of(tag.getLong("pos")), tag.getString("name"), ServerLifecycleHooks.getCurrentServer().getLevel(dimensionResourceKey), tag.getUUID("warpPadId"));
     }
 
     public BlockPos getPos() {
