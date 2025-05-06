@@ -16,7 +16,6 @@ import java.util.UUID;
 public class WarpPadListSavedData extends SavedData {
 
     public final List<WarpPadData> DATA = new ArrayList<>();
-    private static final ServerLevel overworld = ServerLifecycleHooks.getCurrentServer().overworld();
 
     public static WarpPadListSavedData create() {
         return new WarpPadListSavedData();
@@ -44,7 +43,7 @@ public class WarpPadListSavedData extends SavedData {
     }
 
     public static void addWarpPad(WarpPadData object) {
-        WarpPadListSavedData data = overworld.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
+        WarpPadListSavedData data = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
         data.DATA.add(object);
         data.setDirty();
         System.out.println(data.DATA);
@@ -55,17 +54,17 @@ public class WarpPadListSavedData extends SavedData {
     }
 
     public static void removeWarpPad(WarpPadData object) {
-        WarpPadListSavedData data = overworld.getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
+        WarpPadListSavedData data = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
         data.DATA.remove(object);
         data.setDirty();
         System.out.println(data.DATA);
     }
 
     public static void removeWarpPad(UUID id) {
-        WarpPadListSavedData.removeWarpPad(new WarpPadData(new BlockPos(0,0,0), "", overworld, id));
+        WarpPadListSavedData.removeWarpPad(new WarpPadData(new BlockPos(0,0,0), "", ServerLifecycleHooks.getCurrentServer().overworld(), id));
     }
 
     public static WarpPadListSavedData getData() {
-        return overworld.getDataStorage().get(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
+        return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().get(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
     }
 }
