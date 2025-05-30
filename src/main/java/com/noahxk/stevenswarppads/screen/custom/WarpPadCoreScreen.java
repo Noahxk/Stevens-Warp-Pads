@@ -105,6 +105,8 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu>{
     }
 
     private void loadPage(int page) {
+        WarpPadData currentPad = WarpPadListSavedData.getPad(blockEntity.getWarpPadId());
+
         int padCount = padList.size();
         int pageButtonIndex = page * 4;
 
@@ -115,7 +117,7 @@ public class WarpPadCoreScreen extends AbstractContainerScreen<WarpPadCoreMenu>{
         for(int j = 0; j < pageButtonCount; j++) {
             WarpPadData pad = padList.get(pageButtonIndex);
 
-            GuiEventListener btn = addRenderableWidget(new WarpOptionButton(this.width / 2 - 40, this.height / 2 + yLevel, Component.literal(pad.getName()), blockEntity.getBlockPos(), pad.getPos()));
+            GuiEventListener btn = addRenderableWidget(new WarpOptionButton(this.width / 2 - 40, this.height / 2 + yLevel, pad, currentPad));
             activeButtons.add(btn);
             pageButtonIndex++;
             yLevel += 30;
