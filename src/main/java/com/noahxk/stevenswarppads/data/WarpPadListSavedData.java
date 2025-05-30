@@ -67,4 +67,9 @@ public class WarpPadListSavedData extends SavedData {
     public static WarpPadListSavedData getData() {
         return ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().get(new Factory<WarpPadListSavedData>(WarpPadListSavedData::create, new WarpPadListSavedData()::load), "warppadlist");
     }
+
+    public static WarpPadData getPad(UUID id) {
+        WarpPadData pad = WarpPadListSavedData.getData().DATA.get(WarpPadListSavedData.getData().DATA.indexOf(new WarpPadData(new BlockPos(0,0,0), "", ServerLifecycleHooks.getCurrentServer().overworld(), id)));
+        return pad;
+    }
 }
