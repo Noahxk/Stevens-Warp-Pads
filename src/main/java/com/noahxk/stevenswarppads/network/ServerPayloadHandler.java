@@ -6,6 +6,8 @@ import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpPadNameChangeP
 import net.minecraft.core.BlockPos;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.UUID;
+
 public class ServerPayloadHandler {
     // For warp pads changing their names
     public static void handleDataOnMain(final ServerboundWarpPadNameChangePacket data, final IPayloadContext context) {
@@ -15,6 +17,7 @@ public class ServerPayloadHandler {
 
     // For starting a warp
     public static void handleDataOnMain(final ServerboundWarpLocationSelectedPacket data, final IPayloadContext context) {
-        System.out.println("From: " + BlockPos.of(data.fromPos()) + " To: " + BlockPos.of(data.toPos()));
+        WarpStream warpStream = new WarpStream(UUID.fromString(data.fromPadId()), UUID.fromString(data.toPadId()));
+        warpStream.startWarpSequence();
     }
 }

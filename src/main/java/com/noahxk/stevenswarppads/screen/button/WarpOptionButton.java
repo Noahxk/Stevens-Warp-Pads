@@ -4,29 +4,24 @@ import com.noahxk.stevenswarppads.data.WarpPadData;
 import com.noahxk.stevenswarppads.network.payloads.ServerboundWarpLocationSelectedPacket;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class WarpOptionButton extends AbstractButton {
-    private final CompoundTag destinationPad;
-    private final CompoundTag currentPad;
+    private final WarpPadData destinationPad;
+    private final WarpPadData currentPad;
 
     public WarpOptionButton(int x, int y, WarpPadData destinationPad, WarpPadData currentPad) {
         super(x, y, 80, 18, Component.literal(destinationPad.getName()));
-        this.destinationPad = destinationPad.serialize();
-        this.currentPad = currentPad.serialize();
+        this.destinationPad = destinationPad;
+        this.currentPad = currentPad;
     }
 
     @Override
     public void onPress() {
         PacketDistributor.sendToServer(new ServerboundWarpLocationSelectedPacket(
-            currentPad.getLong("pos"),
-            currentPad.getString("dimension"),
-            currentPad.getUUID("warpPadId").toString(),
-            destinationPad.getLong("pos"),
-            destinationPad.getString("dimension"),
-            destinationPad.getUUID("warpPadId").toString()
+            currentPad.getId().toString(),
+            destinationPad.getId().toString()
         ));
     }
 
